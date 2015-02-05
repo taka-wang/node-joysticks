@@ -1,10 +1,12 @@
+var socket = io.connect("http://" + window.location.hostname + ":7000");
+socket.on("connect", function() {
+    console.log("connect");
+});
+
 var w = window.innerWidth;
 var h = window.innerHeight;
-var pressTimer;
 var r1  = w/6 + 10; // big circle
 var r2  = 2/30 * w; // small circle
-var t = 0,
-    color = d3.interpolateHcl("purple", "orange");
 
 var dataset = [ 
     [w/4, h/2, r1],             // big1
@@ -50,17 +52,16 @@ svg.selectAll("circle")
     })
     .attr("stroke", "#A4A4A4")
     .on("touchstart", function(d, i){
-        document.body.style.background = "red";
+        document.body.style.background = "orange";
         d3.event.preventDefault();
         d3.select(d3.event.target)
             .on("touchmove", function() {
-                //alert(i);
-                t += .04;
-                document.body.style.background = color(Math.abs(t % 2 - 1));
-                if (t > 2) d3.select("div").remove();
+                socket.emit("message", i);
                 d3.event.preventDefault();
             })
             .on("touchend", function() {
                 document.body.style.background = "";
             })
     })
+
+//---
