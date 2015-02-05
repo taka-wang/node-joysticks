@@ -1,0 +1,11 @@
+{
+  "name": "node-joysticks",
+  "version": "1.0.0",
+  "description": "joystick for mearm",
+  "main": "index.js",
+  "dependencies": {
+    "socket.io": "~1.3.2"
+  },
+  "author": "Taka Wang",
+  "license": "MIT"
+}
