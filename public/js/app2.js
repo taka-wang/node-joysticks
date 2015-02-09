@@ -1,9 +1,9 @@
-/*
+
 var socket = io.connect("http://" + window.location.hostname + ":7000");
 socket.on("connect", function() {
     console.log("connect");
 });
-*/
+
 
 var w = window.innerWidth;
 var h = window.innerHeight;
@@ -90,9 +90,11 @@ var sLAY = d3.scale.linear()
 
 var sRAX = d3.scale.linear()
                 .domain([w/4 * 3 - r + 40, w/4 * 3 + r - 40])
-                .rangeRound([0,1023]);
+                .rangeRound([1023,0]);
 
-var sRAY = sLAY;
+var sRAY = d3.scale.linear()
+                .domain([h/2 - r + 40, h/2 + r - 40])
+                .rangeRound([0, 1023]);
 
 /*-------------------------------------*/
 
@@ -125,6 +127,14 @@ function redraw_left() {
 function on_dragend_left() {
     console.log("drag left end");
     console.log( [ sLAX(model_left.get()[0]), sLAY(model_left.get()[1]) ] );
+    if (Math.abs(sLAX(model_left.get()[0]) - 512)  >  Math.abs(sLAY(model_left.get()[1]) - 512 ) ) {
+        console.log("X");
+        socket.emit("message","1:" + sLAX(model_left.get()[0]) + "\n" );
+    } else {
+        console.log("Y");
+        socket.emit("message","2:" + sLAY(model_left.get()[1]) + "\n" );
+    }
+
     //socket.emit("message", i);
     model_left.set([w/4, h/2]); // reset
     redraw_left();
@@ -166,6 +176,15 @@ function redraw_right() {
 function on_dragend_right() {
     console.log("drag right end");
     console.log( [ sRAX(model_right.get()[0]), sRAY(model_right.get()[1]) ] );
+    if (Math.abs(sRAX(model_right.get()[0]) - 512) > Math.abs( sRAY(model_right.get()[1]) - 512 ) ) {
+        console.log("X");
+        socket.emit("message","3:" + sRAX(model_right.get()[0]) + "\n" );
+    } else {
+        console.log("Y");
+        socket.emit("message","4:" + sRAY(model_right.get()[1]) + "\n" );
+    }
+
+
     //socket.emit("message", i);
     model_right.set([w/4 * 3, h/2]); // reset
     redraw_right();
