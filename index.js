@@ -28,10 +28,8 @@ io.sockets
                     console.log("R RIGHT");
                     break;
             }
-            //socket.broadcast.send(data);
         });
         socket.on('disconnect', function() {
             console.log("disconnect");
-            // handle disconnect
         });
     });
