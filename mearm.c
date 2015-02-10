@@ -7,7 +7,7 @@ Servo servoClaw;
 
 String str;
 
-int pos_left    = 170;
+int pos_left    = 160;
 int pos_right   = 100;
 int pos_bottom  = 75;
 int pos_claw    = 52;
@@ -94,7 +94,7 @@ void loop() {
         switch (servo) {
             case 1: // left
                 //
-                angel = map(angel, 0, 1023, 40, 170);
+                angel = map(angel, 0, 1023, 40, 160);
                 LEFT(angel);
                 break;
             case 2: // right
@@ -109,7 +109,7 @@ void loop() {
                 break;
             case 4: // claw
                 //
-                angel = map(angel, 0, 1023, 27, 52);
+                angel = map(angel, 0, 1023, 25, 52);
                 Claw(angel);
                 break;
             default:
