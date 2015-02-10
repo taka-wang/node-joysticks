@@ -114,8 +114,6 @@ var circle1 = svg.append("circle")
 
 function on_drag_left() {
     d3.select("#handle_left").attr("opacity", "0.5");
-    console.log("on_drag_left");
-    console.log([d3.event.x, d3.event.y]);
     model_left.set([d3.event.x, d3.event.y]);
     redraw_left();
 }
