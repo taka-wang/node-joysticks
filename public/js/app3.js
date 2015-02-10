@@ -114,8 +114,21 @@ var circle1 = svg.append("circle")
 
 function on_drag_left() {
     d3.select("#handle_left").attr("opacity", "0.5");
-    console.log("on_drag_left");
-    console.log([d3.event.x, d3.event.y]);
+    if (Math.abs(sLAX(model_left.get()[0]) - 512)  >  Math.abs(sLAY(model_left.get()[1]) - 512 ) ) {
+        console.log("X");
+        if ( sLAX(model_left.get()[0]) > 512 ) {
+            socket.emit("message", "1:1\n");
+        } else {
+            socket.emit("message", "1:0\n");
+        }
+    } else {
+        console.log("Y");
+        if (sLAY(model_left.get()[1]) > 512) {
+            socket.emit("message", "2:1\n");
+        } else {
+            socket.emit("message", "2:0\n");
+        }
+    }
     model_left.set([d3.event.x, d3.event.y]);
     redraw_left();
 }
@@ -129,14 +142,6 @@ function redraw_left() {
 function on_dragend_left() {
     console.log("drag left end");
     console.log( [ sLAX(model_left.get()[0]), sLAY(model_left.get()[1]) ] );
-    if (Math.abs(sLAX(model_left.get()[0]) - 512)  >  Math.abs(sLAY(model_left.get()[1]) - 512 ) ) {
-        console.log("X");
-        socket.emit("message","1:" + sLAX(model_left.get()[0]) + "\n" );
-    } else {
-        console.log("Y");
-        socket.emit("message","2:" + sLAY(model_left.get()[1]) + "\n" );
-    }
-
     //socket.emit("message", i);
     model_left.set([w/4, h/2]); // reset
     redraw_left();
@@ -165,6 +170,21 @@ var circle2 = svg.append("circle")
 
 function on_drag_right() {
     d3.select("#handle_right").attr("opacity", "0.5");
+    if (Math.abs(sRAX(model_right.get()[0]) - 512) > Math.abs( sRAY(model_right.get()[1]) - 512 ) ) {
+        console.log("X");
+        if (sRAX(model_right.get()[0]) > 512) {
+            socket.emit("message", "3:1\n"); //positive
+        } else {
+            socket.emit("message", "3:0\n"); //negative
+        }
+    } else {
+        console.log("Y");
+        if (sRAY(model_right.get()[1]) > 512 ) {
+            socket.emit("message", "4:1\n");
+        } else {
+            socket.emit("message", "4:0\n");
+        }
+    }
     model_right.set([d3.event.x, d3.event.y]);
     redraw_right();
 }
@@ -178,16 +198,6 @@ function redraw_right() {
 function on_dragend_right() {
     console.log("drag right end");
     console.log( [ sRAX(model_right.get()[0]), sRAY(model_right.get()[1]) ] );
-    if (Math.abs(sRAX(model_right.get()[0]) - 512) > Math.abs( sRAY(model_right.get()[1]) - 512 ) ) {
-        console.log("X");
-        socket.emit("message","3:" + sRAX(model_right.get()[0]) + "\n" );
-    } else {
-        console.log("Y");
-        socket.emit("message","4:" + sRAY(model_right.get()[1]) + "\n" );
-    }
-
-
-    //socket.emit("message", i);
     model_right.set([w/4 * 3, h/2]); // reset
     redraw_right();
     d3.select("#handle_right").attr("opacity", "1");
