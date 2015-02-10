@@ -4,6 +4,66 @@ Servo servoRight;
 Servo servoBottom;
 Servo servoClaw; 
 
+
+String str;
+
+int pos_left    = 170;
+int pos_right   = 100;
+int pos_bottom  = 75;
+int pos_claw    = 52;
+int pos         = 0;
+
+void LEFT(int val) {
+    if (val > pos_left) {
+        for (pos = pos_left; pos <= val; pos += 3) {
+            servoLeft.write(pos);
+            delay(30);
+        }
+    } else {
+        for (pos = pos_left; pos >= val; pos -= 3) {
+            servoLeft.write(pos);
+            delay(30);
+        }
+    }
+    pos_left = val;
+}
+
+void RIGHT(int val) {
+    if (val > pos_right) {
+        for (pos = pos_right; pos <= val; pos += 3) {
+            servoRight.write(pos);
+            delay(30);
+        }
+    } else {
+        for (pos = pos_right; pos >= val; pos -= 3) {
+            servoRight.write(pos);
+            delay(30);
+        }
+    }
+    pos_right = val;
+}
+
+void Bottom(int val) {
+    if (val > pos_bottom) {
+        for (pos = pos_bottom; pos <= val; pos += 3) {
+            servoBottom.write(pos);
+            delay(30);
+        }
+    } else {
+        for (pos = pos_bottom; pos >= val; pos -= 3) {
+            servoBottom.write(pos);
+            delay(30);
+        }
+    }
+    pos_bottom = val;
+}
+
+void Claw(int val) {
+    pos_claw = val;
+    servoClaw.write(pos_claw);
+}
+
+
 void setup() {
     pinMode(13, OUTPUT);
     Serial.begin(9600);
@@ -12,11 +72,11 @@ void setup() {
     servoBottom.attach(6);
     servoClaw.attach(5);
     delay(100);
-    servoLeft.write(170);
-    servoRight.write(100);
-    servoBottom.write(75);
-    servoClaw.write(52);
-    servoClaw.write(27);
+    LEFT(170);
+    RIGHT(100);
+    Bottom(75);
+    Claw(52);
+    Claw(27);
     for (int i = 0; i < 5; i++)  {
         digitalWrite(13, HIGH);
         delay(300);
@@ -26,7 +86,6 @@ void setup() {
     digitalWrite(13, HIGH);
 }
 
-String str;
 void loop() {
     if (Serial.available() > 0) {
         str = Serial.readStringUntil('\n');
@@ -36,22 +95,22 @@ void loop() {
             case 1: // left
                 //
                 angel = map(angel, 0, 1023, 40, 170);
-                servoLeft.write(angel);
+                LEFT(angel);
                 break;
             case 2: // right
                 //
                 angel = map(angel, 0, 1023, 100, 150);
-                servoRight.write(angel);
+                RIGHT(angel);
                 break;
             case 3: // bottom
                 //
                 angel = map(angel, 0, 1023, 10, 160);
-                servoBottom.write(angel);
+                Bottom(angel);
                 break;
             case 4: // claw
                 //
                 angel = map(angel, 0, 1023, 27, 52);
-                servoClaw.write(angel);
+                Claw(angel);
                 break;
             default:
                 Serial.println("unknow");
